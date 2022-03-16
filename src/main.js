@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
+import App from './views/Sorteo.vue';
+//import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 import '@babel/polyfill';
@@ -12,7 +12,7 @@ Vue.use(PerfectScrollbar);
 Vue.config.productionTip = false;
 export const nuxt = new Vue({});
 new Vue({
-  router,
+
   store,
   vuetify,
 

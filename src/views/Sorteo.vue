@@ -1,369 +1,382 @@
 <template>
-  <v-carousel hide-delimiters height="100%">
-    <v-carousel-item>
-      <v-container class="mt-4">
-        <v-row>
-          <v-col cols="12" xs="12" sm="12" md="6">
-            <v-file-input
-              chips
-              id="file"
-              multiple
-              outlined
-              label="Agregar jugadores desde un archivo"
-              accept="text/csv,text/plain"
-              style="max-width: 80%"
-            ></v-file-input>
-            <v-spacer></v-spacer>
-          </v-col>
+  <v-app>
+    <v-main>
+      <v-carousel hide-delimiters height="100%">
+        <v-carousel-item>
+          <v-container class="mt-4">
+            <v-row>
+              <v-col cols="12" xs="12" sm="12" md="6">
+                <v-file-input
+                  chips
+                  id="file"
+                  multiple
+                  outlined
+                  label="Agregar jugadores desde un archivo"
+                  accept="text/csv,text/plain"
+                  style="max-width: 80%"
+                ></v-file-input>
+                <v-spacer></v-spacer>
+              </v-col>
 
-          <v-col cols="12" xs="12" sm="12" md="6">
-            <div class="text-right">
-              <v-spacer></v-spacer>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="2"
-                    :color="Complementario1"
-                    large
-                    @click="daNumero()"
-                    v-bind="attrs"
-                    v-on="on"
-                    class="mr-4"
-                  >
-                    Numerar
-                  </v-btn>
-                </template>
-                <span
-                  >Asigna numero a los que les falta, a partir del numero mayor
-                  de ellos</span
-                >
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="2"
-                    :color="Complementario1"
-                    large
-                    @click="vaciar()"
-                    v-bind="attrs"
-                    v-on="on"
-                    class="mr-4"
-                  >
-                    Vaciar
-                  </v-btn>
-                </template>
-                <span>vacía el listado</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    elevation="2"
-                    :color="Complementario1"
-                    large
-                    @click="agrupar()"
-                    v-bind="attrs"
-                    v-on="on"
-                    class="mr-4"
-                  >
-                    agrupar
-                  </v-btn>
-                </template>
-                <span>a todos les asigna un grupo nuevo a azar, </span>
-              </v-tooltip>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-container>
-        <v-data-table
-          :headers="tableheader"
-          :items="listado"
-          :items-per-page="10"
-          class="elevation-1"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Listado de jugadores</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-          </template>
-
-          <template v-slot:item.comandos="{ item }">
-            <v-icon small class="mr-2" @click="editJugador(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteJugador(item)"> mdi-delete </v-icon>
-          </template>
-          <template v-slot:footer.page-text>
-            <v-btn
-              :color="Complementario4"
-              class="ma-2"
-              @click="overlayAgregaJugador = true"
+              <v-col cols="12" xs="12" sm="12" md="6">
+                <div class="text-right">
+                  <v-spacer></v-spacer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        elevation="2"
+                        :color="Complementario1"
+                        large
+                        @click="daNumero()"
+                        v-bind="attrs"
+                        v-on="on"
+                        class="mr-4"
+                      >
+                        Numerar
+                      </v-btn>
+                    </template>
+                    <span
+                      >Asigna numero a los que les falta, a partir del numero
+                      mayor de ellos</span
+                    >
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        elevation="2"
+                        :color="Complementario1"
+                        large
+                        @click="vaciar()"
+                        v-bind="attrs"
+                        v-on="on"
+                        class="mr-4"
+                      >
+                        Vaciar
+                      </v-btn>
+                    </template>
+                    <span>vacía el listado</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        elevation="2"
+                        :color="Complementario1"
+                        large
+                        @click="agrupar()"
+                        v-bind="attrs"
+                        v-on="on"
+                        class="mr-4"
+                      >
+                        agrupar
+                      </v-btn>
+                    </template>
+                    <span>a todos les asigna un grupo nuevo a azar, </span>
+                  </v-tooltip>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container>
+            <v-data-table
+              :headers="tableheader"
+              :items="listado"
+              :items-per-page="10"
+              class="elevation-1"
             >
-              <v-icon small> mdi-plus </v-icon>Agregar
-            </v-btn>
-          </template>
-        </v-data-table>
-      </v-container>
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>Listado de jugadores</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+              </template>
 
-      <v-snackbar v-model="snackbar" timeout="10000" :color="Complementario4">
-        {{ snackbartext }}
+              <template v-slot:item.comandos="{ item }">
+                <v-icon small class="mr-2" @click="editJugador(item)">
+                  mdi-pencil
+                </v-icon>
+                <v-icon small @click="deleteJugador(item)"> mdi-delete </v-icon>
+              </template>
+              <template v-slot:footer.page-text>
+                <v-btn
+                  :color="Complementario4"
+                  class="ma-2"
+                  @click="overlayAgregaJugador = true"
+                >
+                  <v-icon small> mdi-plus </v-icon>Agregar
+                </v-btn>
+              </template>
+            </v-data-table>
+          </v-container>
 
-        <template v-slot:action="{ attrs }">
-          <v-btn color="black" text v-bind="attrs" @click="snackbar = false">
-            Cerrar
-          </v-btn>
-        </template>
-      </v-snackbar>
+          <v-snackbar
+            v-model="snackbar"
+            timeout="10000"
+            :color="Complementario4"
+          >
+            {{ snackbartext }}
 
-      <v-overlay :value="overlay">
-        <v-card class="mx-auto" max-width="450" :color="Complementario2">
-          <v-card-text>
-            <p class="text-h5 text--primary">¿cuantos grupos va a armar?</p>
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="black"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+              >
+                Cerrar
+              </v-btn>
+            </template>
+          </v-snackbar>
 
-            <v-simple-table dense>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Grupos</th>
-                    <th class="text-left">composición</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="item in gruposPosibles"
-                    :key="item.name"
+          <v-overlay :value="overlay">
+            <v-card class="mx-auto" max-width="450" :color="Complementario2">
+              <v-card-text>
+                <p class="text-h5 text--primary">¿cuantos grupos va a armar?</p>
+
+                <v-simple-table dense>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Grupos</th>
+                        <th class="text-left">composición</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="item in gruposPosibles"
+                        :key="item.name"
+                        @click="
+                          cantGruposElegidos = item;
+                          eligeCantGrupos();
+                        "
+                      >
+                        <td class="text-center">{{ item.cuantos }}</td>
+                        <td>{{ item.texto }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-btn
+                  elevation="2"
+                  :color="Complementario3"
+                  @click="overlay = false"
+                >
+                  Cancelar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-overlay>
+
+          <v-overlay :value="logoespera">
+            <v-progress-circular
+              :size="150"
+              :width="17"
+              color="purple"
+              indeterminate
+            ></v-progress-circular>
+          </v-overlay>
+          <v-overlay :value="overlayConfirmaAsignarGrupo">
+            <template>
+              <v-card
+                class="mx-auto my-12"
+                max-width="374"
+                :color="Complementario5"
+              >
+                <v-card-title>Ya había asignado grupos</v-card-title>
+                <v-card-text>
+                  <div>
+                    Si vuelve a asignar, los grupos actuales se reemplazarán por
+                    otros al azar
+                  </div>
+                </v-card-text>
+                <v-divider class="mx-4"></v-divider>
+                <v-card-actions>
+                  <v-btn
+                    :color="Complementario1"
+                    text
                     @click="
-                      cantGruposElegidos = item;
+                      confirmadoAsignarGrupo = true;
+
                       eligeCantGrupos();
                     "
                   >
-                    <td class="text-center">{{ item.cuantos }}</td>
-                    <td>{{ item.texto }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              elevation="2"
-              :color="Complementario3"
-              @click="overlay = false"
-            >
-              Cancelar
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-overlay>
-
-      <v-overlay :value="logoespera">
-        <v-progress-circular
-          :size="150"
-          :width="17"
-          color="purple"
-          indeterminate
-        ></v-progress-circular>
-      </v-overlay>
-      <v-overlay :value="overlayConfirmaAsignarGrupo">
-        <template>
-          <v-card
-            class="mx-auto my-12"
-            max-width="374"
-            :color="Complementario5"
-          >
-            <v-card-title>Ya había asignado grupos</v-card-title>
-            <v-card-text>
-              <div>
-                Si vuelve a asignar, los grupos actuales se reemplazarán por
-                otros al azar
-              </div>
-            </v-card-text>
-            <v-divider class="mx-4"></v-divider>
-            <v-card-actions>
-              <v-btn
-                :color="Complementario1"
-                text
-                @click="
-                  confirmadoAsignarGrupo = true;
-
-                  eligeCantGrupos();
-                "
-              >
-                Confirmar
-              </v-btn>
-              <v-btn
-                :color="Complementario1"
-                text
-                @click="
-                  overlayConfirmaAsignarGrupo = false;
-                  overlay = false;
-                "
-              >
-                Cancelar
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-overlay>
-
-      <v-overlay :value="overlayAgregaJugador">
-        <v-card class="mx-auto" elevation="24" :color="Complementario3">
-          <v-card-text>
-            <v-form ref="form">
-              <v-text-field
-                v-model="editaJugador[0].nombre"
-                :rules="[(v) => !!v || 'Faltó el nombre']"
-                required
-                label="Nombre"
-              ></v-text-field>
-
-              <v-text-field
-                v-model="editaJugador[0].posicion"
-                label="Numero"
-              ></v-text-field>
-              <v-text-field
-                v-model="editaJugador[0].grupo"
-                label="Grupo"
-              ></v-text-field>
-
-              <v-btn
-                :color="Complementario4"
-                class="mr-4"
-                @click="listadoAgrega(editaJugador)"
-              >
-                Agregar </v-btn
-              ><v-btn
-                :color="Complementario5"
-                class="mr-4"
-                @click="overlayAgregaJugador = false"
-              >
-                Cancelar
-              </v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-overlay>
-
-      <v-overlay :value="overlayEditaJugador">
-        <v-card class="mx-auto" elevation="24" :color="Complementario3">
-          <v-card-text>
-            <v-form ref="form">
-              <v-text-field
-                v-model="editaJugador[0].nombre"
-                :rules="[(v) => !!v || 'Faltó el nombre']"
-                required
-                label="Nombre"
-              ></v-text-field>
-
-              <v-text-field
-                v-model="editaJugador[0].posicion"
-                label="Numero"
-              ></v-text-field>
-              <v-text-field
-                v-model="editaJugador[0].grupo"
-                label="Grupo"
-              ></v-text-field>
-
-              <v-btn
-                :color="Complementario4"
-                class="mr-4"
-                @click="reemplazaJugador()"
-              >
-                Cambiar </v-btn
-              ><v-btn
-                :color="Complementario5"
-                class="mr-4"
-                @click="overlayEditaJugador = false"
-              >
-                Cancelar
-              </v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-overlay>
-    </v-carousel-item>
-    <v-carousel-item>
-      <template>
-        <v-container>
-          <v-row class="text-center">
-            <v-col cols="12" md="2">
-              <v-card
-                class="mx-auto"
-                elevation="24"
-                max-width="200px"
-                min-width="160px"
-                :color="Complementario3"
-                outlined
-              >
-                <v-card-text>
-                  <v-form ref="form">
-                    <v-select
-                      :items="puntaje"
-                      item-text="grupo"
-                      :rules="[(v) => !!v || 'Falta']"
-                      label="Grupo"
-                      required
-                      v-model="auxPuntoGrupo"
-                      return-object
-                    ></v-select>
-
-                    <v-text-field
-                      :rules="[numberRule]"
-                      label="Puntaje"
-                      v-model="auxPuntoValor"
-                      type="number"
-                    ></v-text-field>
-
-                    <v-btn
-                      :color="Complementario4"
-                      class="mr-4"
-                      @click="sumapuntos()"
-                    >
-                      Agregar
-                    </v-btn>
-                  </v-form>
-                </v-card-text>
+                    Confirmar
+                  </v-btn>
+                  <v-btn
+                    :color="Complementario1"
+                    text
+                    @click="
+                      overlayConfirmaAsignarGrupo = false;
+                      overlay = false;
+                    "
+                  >
+                    Cancelar
+                  </v-btn>
+                </v-card-actions>
               </v-card>
-            </v-col>
-            <v-col cols="12" md="10">
-              <v-row no-gutters>
-                <v-col
-                  v-for="item in puntaje"
-                  :key="item.grupo"
-                  cols="12"
-                  sm="6"
-                  md="4"
-                >
-                  <v-card class="mx-auto mb-5" width="300">
-                    <v-card-text>
-                      <p class="text-h4 text--primary">
-                        {{ item.grupo }} ({{ item.total }})
-                      </p>
-                    </v-card-text>
+            </template>
+          </v-overlay>
 
-                    <v-sparkline
-                      :fill="true"
-                      :gradient="gradients[4]"
-                      line-width="2"
-                      padding="2"
-                      smooth="6"
-                      :value="item.puntos"
-                      auto-draw
-                    ></v-sparkline>
+          <v-overlay :value="overlayAgregaJugador">
+            <v-card class="mx-auto" elevation="24" :color="Complementario3">
+              <v-card-text>
+                <v-form ref="form">
+                  <v-text-field
+                    v-model="editaJugador[0].nombre"
+                    :rules="[(v) => !!v || 'Faltó el nombre']"
+                    required
+                    label="Nombre"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="editaJugador[0].posicion"
+                    label="Numero"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="editaJugador[0].grupo"
+                    label="Grupo"
+                  ></v-text-field>
+
+                  <v-btn
+                    :color="Complementario4"
+                    class="mr-4"
+                    @click="listadoAgrega(editaJugador)"
+                  >
+                    Agregar </v-btn
+                  ><v-btn
+                    :color="Complementario5"
+                    class="mr-4"
+                    @click="overlayAgregaJugador = false"
+                  >
+                    Cancelar
+                  </v-btn>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-overlay>
+
+          <v-overlay :value="overlayEditaJugador">
+            <v-card class="mx-auto" elevation="24" :color="Complementario3">
+              <v-card-text>
+                <v-form ref="form">
+                  <v-text-field
+                    v-model="editaJugador[0].nombre"
+                    :rules="[(v) => !!v || 'Faltó el nombre']"
+                    required
+                    label="Nombre"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="editaJugador[0].posicion"
+                    label="Numero"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="editaJugador[0].grupo"
+                    label="Grupo"
+                  ></v-text-field>
+
+                  <v-btn
+                    :color="Complementario4"
+                    class="mr-4"
+                    @click="reemplazaJugador()"
+                  >
+                    Cambiar </v-btn
+                  ><v-btn
+                    :color="Complementario5"
+                    class="mr-4"
+                    @click="overlayEditaJugador = false"
+                  >
+                    Cancelar
+                  </v-btn>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-overlay>
+        </v-carousel-item>
+        <v-carousel-item>
+          <template>
+            <v-container>
+              <v-row class="text-center">
+                <v-col cols="12" md="2">
+                  <v-card
+                    class="mx-auto"
+                    elevation="24"
+                    max-width="200px"
+                    min-width="160px"
+                    :color="Complementario3"
+                    outlined
+                  >
                     <v-card-text>
-                      <p>Puntos: {{ item.value.toString() }}</p>
+                      <v-form ref="form">
+                        <v-select
+                          :items="puntaje"
+                          item-text="grupo"
+                          :rules="[(v) => !!v || 'Falta']"
+                          label="Grupo"
+                          required
+                          v-model="auxPuntoGrupo"
+                          return-object
+                        ></v-select>
+
+                        <v-text-field
+                          :rules="[numberRule]"
+                          label="Puntaje"
+                          v-model="auxPuntoValor"
+                          type="number"
+                        ></v-text-field>
+
+                        <v-btn
+                          :color="Complementario4"
+                          class="mr-4"
+                          @click="sumapuntos()"
+                        >
+                          Agregar
+                        </v-btn>
+                      </v-form>
                     </v-card-text>
                   </v-card>
                 </v-col>
+                <v-col cols="12" md="10">
+                  <v-row no-gutters>
+                    <v-col
+                      v-for="item in puntaje"
+                      :key="item.grupo"
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-card class="mx-auto mb-5" width="300">
+                        <v-card-text>
+                          <p class="text-h4 text--primary">
+                            {{ item.grupo }} ({{ item.total }})
+                          </p>
+                        </v-card-text>
+
+                        <v-sparkline
+                          :fill="true"
+                          :gradient="gradients[4]"
+                          line-width="2"
+                          padding="2"
+                          smooth="6"
+                          :value="item.puntos"
+                          auto-draw
+                        ></v-sparkline>
+                        <v-card-text>
+                          <p>Puntos: {{ item.value.toString() }}</p>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-col>
               </v-row>
-            </v-col>
-          </v-row>
-        </v-container>
-      </template>
-    </v-carousel-item>
-  </v-carousel>
+            </v-container>
+          </template>
+        </v-carousel-item>
+      </v-carousel>
+    </v-main>
+  </v-app>
 </template>
 <script>
 import config from "../../configuraciones.js";

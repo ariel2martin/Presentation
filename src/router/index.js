@@ -1,9 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import GraficoDinamico from "../views/GraficoDinamico.vue";
-import GraficoEjemplo from "../views/GraficoEjemplo.vue";
-import FileSelect from "../views/FileSelect.vue";
+import GraficoDinamico from "@/views/GraficoDinamico.vue";
+import GraficoEjemplo from "@/views/GraficoEjemplo.vue";
+import FileSelect from "@/views/FileSelect.vue";
+import sorteo from "@/views/Sorteo.vue";
 
 Vue.use(VueRouter);
 
@@ -27,7 +28,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: GraficoDinamico,
+    component: sorteo,
   },
   {
     path: "/Tabla",
@@ -35,20 +36,20 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "datos"*/ "../views/Tabla.vue"),
   }, {
-    path: "/Asign",
-    name: "Asign",
+    path: "/asign",
+    name: "asign",
     component: () =>
       import(/* webpackChunkName: "datos"*/ "../views/Asign.vue"),
   }, {
-    path: "/Sorteo",
-    name: "Sorteo",
+    path: "/sorteo",
+    name: "sorteo",
     component: () =>
       import(/* webpackChunkName: "datos"*/ "../views/Sorteo.vue"),
   },];
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
+  base: "/",
   routes,
 });
 
