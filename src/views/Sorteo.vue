@@ -46,7 +46,7 @@
                         elevation="2"
                         :color="Complementario1"
                         large
-                        @click="vaciar()"
+                        @click="overlaySeguroVacia = true"
                         v-bind="attrs"
                         v-on="on"
                         class="mr-4"
@@ -294,6 +294,38 @@
               </v-card-text>
             </v-card>
           </v-overlay>
+          <v-overlay :value="overlaySeguroVacia">
+            <template>
+              <v-card
+                class="mx-auto my-12"
+                max-width="374"
+                :color="Complementario5"
+              >
+                <v-card-title>¿Seguro desea vaciar todo?</v-card-title>
+                <v-card-text> </v-card-text>
+                <v-divider class="mx-4"></v-divider>
+                <v-card-actions>
+                  <v-btn
+                    :color="Complementario1"
+                    text
+                    @click="
+                      vaciar();
+                      overlaySeguroVacia = false;
+                    "
+                  >
+                    Confirmar
+                  </v-btn>
+                  <v-btn
+                    :color="Complementario1"
+                    text
+                    @click="overlaySeguroVacia = false"
+                  >
+                    Cancelar
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-overlay>
         </v-carousel-item>
         <v-carousel-item>
           <template>
@@ -419,6 +451,7 @@ export default {
       confirmadoAsignarGrupo: false,
       overlayAgregaJugador: false,
       overlayEditaJugador: false,
+      overlaySeguroVacia: false,
       snackbar: false,
       snackbartext: "",
 
